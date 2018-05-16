@@ -110,6 +110,7 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
          g.setColor(Color.RED);
          g.setFont(new Font("Courier New", Font.PLAIN, 60));
          g.drawString("LOST IT!", 350, 350);
+         bulletCount = 3;
       }
       //win
       if (hit == true) {
@@ -117,15 +118,18 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
          g.setFont(new Font("Courier New", Font.PLAIN, 60));
          g.drawString("GOT IT!", 350, 350);
          hit = false;
+         bulletCount = 3;
       }
       
    }
    
    public void mouseClicked(MouseEvent mouse){
         // Get the location of the current mouse click.
-        mouseX = mouse.getX();
-        mouseY = mouse.getY();
-        bulletCount--;
+         if (bulletCount >= 0) {  
+           mouseX = mouse.getX();
+           mouseY = mouse.getY();
+           bulletCount--;
+         }
         // Tell the panel that we need to redraw things.
         repaint();
     }
