@@ -27,6 +27,7 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
    private int ballColor;
    private double lives;
    private boolean gg;
+   private boolean replay;
    
    // Other properties
    private int mouseX;
@@ -47,6 +48,7 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
       ballColor = 1;
       lives = 3.0;
       gg = false;
+      replay = false;
       // Start the ball bouncing (in its own thread)
       Thread gameThread = new Thread() {
          public void run() {
@@ -72,7 +74,7 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
                   ballY = BOX_HEIGHT_INFO - ballRadius;
                }
                
-               if (Math.sqrt(Math.pow(mouseX-ballX,2)+Math.pow(mouseY-ballY,2)) <= ballRadius) {
+               if (Math.sqrt(Math.pow(mouseX-ballX,2)+Math.pow(mouseY-ballY,2)) <= ballRadius && !gg) {
                   ballSpeedX = 0;
                   ballSpeedY = 0;
                   hit = true;
@@ -99,6 +101,27 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
                if (gg) {
                   ballSpeedX = 0;
                   ballSpeedY = 0;
+               }
+               
+               if (replay == true) {
+                  ballX = ballRadius + (float)(Math.random()*600);; // Ball's center (x, y)
+                  ballY = ballRadius + (float)(Math.random()*600); 
+                  if (Math.random()-0.5 < 0) {
+                      ballSpeedX = (float)(Math.random()*10+10);   // Ball's speed for x and y
+                      ballSpeedY = (float)(Math.random()*10+10);
+                  } else {
+                      ballSpeedX = (float)(Math.random()*10+10)*(-1);   // Ball's speed for x and y
+                      ballSpeedY = (float)(Math.random()*10+10)*(-1);
+                  }
+                  ballColor = (int)(Math.random()*3+1);
+                  bulletCount = 3;
+                  hit = false;
+                  lost = false;
+                  score = 0;
+                  ballColor = 1;
+                  lives = 3.0;
+                  gg = false;
+                  replay = false;
                }
                
                // Refresh the display              
@@ -219,18 +242,32 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
          g.setColor(Color.GRAY);
          g.setFont(new Font("Courier New", Font.PLAIN, 90));
          g.drawString("GG!", 330, 350);
+         //replay button
+         g.setColor(Color.orange);
+         g.fillRect(330, 450, 130, 70);
+         g.setColor(Color.BLACK);
+         g.setFont(new Font("Courier New", Font.PLAIN, 30));
+         g.drawString("Replay", 340, 490);
       }
    }
    
    public void mouseClicked(MouseEvent mouse){
         // Get the location of the current mouse click.
-        if (bulletCount > 0) {
+        if (bulletCount > 0 && !gg) {
             mouseX = mouse.getX();
             mouseY = mouse.getY();
             wait(50);
             mouseX=0;
             mouseY=0;
             bulletCount--;
+        }
+        
+        if (gg) {
+            mouseX = mouse.getX();
+            mouseY = mouse.getY();
+            if (mouseX <= 460 && mouseX >= 330 && mouseY <= 520 && mouseY >= 450) {
+                replay = true;
+            }
         }
         // Tell the panel that we need to redraw things.
         repaint();
