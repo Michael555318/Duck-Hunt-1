@@ -122,6 +122,8 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
                   lives = 3.0;
                   gg = false;
                   replay = false;
+                  mouseX = 0;
+                  mouseY = 0;
                }
                
                // Refresh the display              
