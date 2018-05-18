@@ -234,10 +234,29 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
          g.drawString("GOT IT!", 350, 350);
          g.setColor(Color.WHITE);
          g.setFont(new Font("Courier New", Font.PLAIN, 30));
-         g.drawString("+1500", (int)(ballX + 60), (int)(ballY + 60));
          hit = false;
-         bulletCount = 3;
+        
+         if(bulletCount==2)
+         {
+         g.drawString("+1500", (int)(ballX + 60), (int)(ballY + 60));
          score += 1500;
+        }
+         
+         else
+          if(bulletCount==1)
+         {
+         g.drawString("+1000", (int)(ballX + 60), (int)(ballY + 60));
+         score += 1000;
+        }
+        
+        else
+         if(bulletCount==0)
+         {
+         g.drawString("+500", (int)(ballX + 60), (int)(ballY + 60));
+         score += 500;
+        }
+         bulletCount = 3;
+         
       }
       
       if (gg) {
