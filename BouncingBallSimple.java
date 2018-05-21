@@ -28,6 +28,7 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
    private double lives;
    private boolean gg;
    private boolean replay;
+   private int timer;
    
    // Other properties
    private int mouseX;
@@ -49,6 +50,7 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
       lives = 3.0;
       gg = false;
       replay = false;
+      timer = 0;
       // Start the ball bouncing (in its own thread)
       Thread gameThread = new Thread() {
          public void run() {
@@ -98,6 +100,10 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
                   ballColor = (int)(Math.random()*3+1);
                }
                
+               if (timer >= 500) {
+                  lost = true;
+               }
+               
                if (gg) {
                   ballSpeedX = 0;
                   ballSpeedY = 0;
@@ -124,6 +130,7 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
                   replay = false;
                   mouseX = 0;
                   mouseY = 0;
+                  timer = 0;
                }
                
                // Refresh the display              
@@ -131,6 +138,9 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
                // Delay for timing control and give other threads a chance
                try {
                   Thread.sleep(1000 / UPDATE_RATE);  // milliseconds
+                  if (!gg) {
+                      timer++;
+                  }
                } catch (InterruptedException ex) { }
             }
          }
@@ -171,7 +181,7 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
             ballSpeedX, ballSpeedY);
       //g.drawString(sb.toString(), 20, 30);  // tester for ball movement
       //g.drawString(mouseX+"" + " " +mouseY, 50, 30);  //tester for mouse
-      
+      //g.drawString(timer+"", 20, 30);  //tester for timer
       
       // bullet count board
       g.setColor(Color.BLACK);
@@ -198,19 +208,19 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
       g.setFont(new Font("Courier New", Font.PLAIN, 30));
       g.drawString("LIVES", 255, 720);
       g.setColor(Color.magenta);
-      if (lives == 3.0) {
+      if ((int)lives == 3) {
          g.fillRect(360, 700, 30, 30);//inner health
          g.fillRect(400, 700, 30, 30);
          g.fillRect(440, 700, 30, 30);//outer health
-      } else if (lives == 2.0) {
+      } else if ((int)lives == 2) {
          g.fillRect(360, 700, 30, 30);
          g.fillRect(400, 700, 30, 30);
          g.drawRect(440, 700, 30, 30);
-      } else if (lives == 1.0) {
+      } else if ((int)lives == 1) {
          g.fillRect(360, 700, 30, 30);
          g.drawRect(400, 700, 30, 30);
          g.drawRect(440, 700, 30, 30);
-      } else if (lives == 0.0){
+      } else if ((int)lives == 0){
          g.drawRect(360, 700, 30, 30);
          g.drawRect(400, 700, 30, 30);
          g.drawRect(440, 700, 30, 30);
@@ -226,7 +236,9 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
          lives-=0.5;
          wait(1000);
          bulletCount = 3;
+         timer = 0;
       }
+
       //win
       if (hit == true) {
          g.setColor(Color.magenta);
@@ -236,29 +248,37 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
          g.setFont(new Font("Courier New", Font.PLAIN, 30));
          hit = false;
         
-         if(bulletCount==2)
-         {
+        if(bulletCount==2)
+        {
          g.drawString("+1500", (int)(ballX + 60), (int)(ballY + 60));
          score += 1500;
         }
-         
-         else
-          if(bulletCount==1)
-         {
+        else if(bulletCount==1)
+        {
          g.drawString("+1000", (int)(ballX + 60), (int)(ballY + 60));
          score += 1000;
         }
-        
-        else
-         if(bulletCount==0)
-         {
+        else if(bulletCount==0)
+        {
          g.drawString("+500", (int)(ballX + 60), (int)(ballY + 60));
          score += 500;
         }
-         bulletCount = 3;
-         
+        bulletCount = 3;
+        timer = 0;
       }
       
+      // time warning
+      if (timer >= 400) {
+         if (timer%10 == 0) {
+             g.setColor(Color.RED);
+             g.fillRect(0, 0, 800, 5);
+             g.fillRect(0, 795, 800, 5);
+             g.fillRect(0, 0, 5, 800);
+             g.fillRect(795, 0, 5, 800);
+         }
+      }
+      
+      // game over
       if (gg) {
          g.setColor(Color.GRAY);
          g.setFont(new Font("Courier New", Font.PLAIN, 90));
@@ -332,4 +352,3 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
    }
    
 }
-
