@@ -30,6 +30,7 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
    private boolean replay;
    private int timer;
    private boolean menu;
+   private int bestScore;
    
    // Other properties
    private int mouseX;
@@ -55,6 +56,7 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
       replay = false;
       timer = 0;
       menu = true;
+      bestScore = 0;
       
       // Start the ball bouncing (in its own thread)
       Thread gameThread = new Thread() {
@@ -204,7 +206,12 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
           g.setColor(Color.YELLOW);
           g.setFont(new Font("Courier New", Font.PLAIN, 30));
           g.drawString("SCORE", 605, 705);
-          g.setColor(Color.WHITE);
+          if (bestScore <= score) {
+              g.setColor(Color.cyan);
+          }
+          else{
+              g.setColor(Color.WHITE);
+          }
           g.drawString(score+"", 605, 740);
           
           // life board
@@ -287,6 +294,11 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
       
       // game over
       if (gg) {
+         //set the new best score
+         if (score > bestScore) {
+             bestScore = score;
+         }
+         //gg text 
          g.setColor(Color.GRAY);
          g.setFont(new Font("Courier New", Font.PLAIN, 90));
          g.drawString("GG!", 330, 350);
@@ -317,6 +329,11 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
          g.setColor(Color.BLACK);
          g.setFont(new Font("Courier New", Font.PLAIN, 30));
          g.drawString("Play", 360, 490);
+         
+         //best score
+         g.setColor(Color.yellow);
+         g.setFont(new Font("Courier New", Font.PLAIN, 30));
+         g.drawString("Best Score: " + bestScore, 450, 30);
       }
    }
    
