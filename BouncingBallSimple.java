@@ -315,7 +315,10 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
          g.setFont(new Font("Courier New", Font.PLAIN, 30));
          g.drawString("EXIT", 350, 590);
       }
-      
+      //best score
+         g.setColor(Color.magenta);
+         g.setFont(new Font("Courier New", Font.BOLD, 30));
+         g.drawString("Best Score: " + bestScore, 450, 30);
       //menu
       if (menu == true) {
          //game title
@@ -329,11 +332,6 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
          g.setColor(Color.BLACK);
          g.setFont(new Font("Courier New", Font.PLAIN, 30));
          g.drawString("Play", 360, 490);
-         
-         //best score
-         g.setColor(Color.yellow);
-         g.setFont(new Font("Courier New", Font.PLAIN, 30));
-         g.drawString("Best Score: " + bestScore, 450, 30);
       }
    }
    
@@ -412,7 +410,7 @@ public class BouncingBallSimple extends JPanel implements MouseListener{
       javax.swing.SwingUtilities.invokeLater(new Runnable() {
          public void run() {
             // Set up main window (using Swing's Jframe)
-            JFrame frame = new JFrame("A Bouncing Ball");
+            JFrame frame = new JFrame("Ball Hunt");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setContentPane(new BouncingBallSimple());
             frame.pack();
