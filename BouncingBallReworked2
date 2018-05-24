@@ -291,7 +291,7 @@ public class BouncingBallsReworked extends JPanel implements MouseListener{
       //g.drawString(timer+"", 20, 30);  //tester for timer
       //g.drawString(exLife+" " + rectHit+" " + (int)rectX+" " 
       //      + (int)rectY+" " + (int)rectSpeedX+" " + (int)rectSpeedY+" " + lives+"", 20, 30);  //tester for exLife
-      g.drawString(a + "", 20, 30); //tester for acceleration
+      //g.drawString(a + "", 20, 30); //tester for acceleration
       
       if (menu == false) {
           // bullet count board
