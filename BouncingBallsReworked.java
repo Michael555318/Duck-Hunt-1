@@ -54,6 +54,7 @@ public class BouncingBallsReworked extends JPanel implements MouseListener{
     private int mouseY;
     private boolean hit;
     private boolean lost;
+    private boolean rules;
    
    private static final int UPDATE_RATE = 60; // Number of refresh per second
   
@@ -66,6 +67,7 @@ public class BouncingBallsReworked extends JPanel implements MouseListener{
       bulletCount = 3;
       hit = false;
       lost = false;
+      rules = false;
       score = 0;
       ballColor = 1;
       lives = 3.0;
@@ -437,7 +439,45 @@ public class BouncingBallsReworked extends JPanel implements MouseListener{
          g.setColor(Color.BLACK);
          g.setFont(new Font("Courier New", Font.PLAIN, 30));
          g.drawString("Play", 360, 490);
+         
+         //rules
+         g.setColor(Color.orange);
+         g.fillRect(330, 550, 130, 70);
+         g.setColor(Color.BLACK);
+         g.setFont(new Font("Courier New", Font.PLAIN, 30));
+         g.drawString("Rules", 350, 590);
       }
+      if (rules == true){
+         //rules content
+         g.setColor(Color.BLACK);
+         g.fillRect(130, 150, 530, 530);
+         g.setColor(Color.white);
+         g.setFont(new Font("Courier New", Font.PLAIN, 30));
+         g.drawString("Rules", 350, 180);
+         g.setFont(new Font("Courier New", Font.PLAIN, 15));
+         g.drawString("Objective: to click on as many bouncing balls", 175, 220);
+         g.drawString("as possible to get maximum points.", 175, 240);
+         g.drawString("Gameplays", 175, 280);
+         g.drawString("- during each round, you will get 3 shots with", 175, 300);
+         g.drawString("the goal to click on the ball.", 175, 320);
+         g.drawString("- you will get 3 lives; you lose a life if you", 175, 340);
+         g.drawString("fail to click the ball with your 3 shots.", 175, 360);
+         g.drawString("- you get 1 extra life when you click on the ", 175, 380);
+         g.drawString("pink square that MAY appear on your screen.", 175, 400);
+         g.drawString("it’s GAME OVER when you lose all 3 lives.", 175, 420);
+         g.drawString("Scoring: you get less points with each shot", 175, 460);
+         g.drawString("+ 1500 points/ball during your FIRST shot!", 175, 480);
+         g.drawString("+ 1000 points/ball during your SECOND shot!", 175, 500);
+         g.drawString("+ 500 points/ball during your THIRD shot!", 175, 520);
+         g.drawString("Timer: failing to click the ball in 15 seconds", 175, 560);
+         g.drawString("cost you 1 life.", 175, 580);
+         //return button
+         g.setColor(Color.orange);
+         g.fillRect(330, 600, 130, 70);
+         g.setColor(Color.BLACK);
+         g.setFont(new Font("Courier New", Font.PLAIN, 30));
+         g.drawString("Return", 340, 640);
+        }
    }
    
    public void mousePressed(MouseEvent mouse){
@@ -465,10 +505,16 @@ public class BouncingBallsReworked extends JPanel implements MouseListener{
             }
         }
         
+        if (rules){
+            if (mouseX <= 460 && mouseX >= 330 && mouseY <= 670 && mouseY >= 600) { //Clicked retu Button
+                rules = false;
+            }
+        }
+        
         if (menu == true) {
             mouseX = mouse.getX();
             mouseY = mouse.getY();
-            if (mouseX <= 460 && mouseX >= 330 && mouseY <= 520 && mouseY >= 450) { //Clicked Play Button
+            if (mouseX <= 460 && mouseX >= 330 && mouseY <= 520 && mouseY >= 450 && rules == false) { //Clicked Play Button
                 menu = false;
                 bulletCount = 3;
                 hit = false;
@@ -482,6 +528,9 @@ public class BouncingBallsReworked extends JPanel implements MouseListener{
                 mouseY = 0;
                 timer = 0;
             }
+            if (mouseX <= 460 && mouseX >= 330 && mouseY <= 620 && mouseY >= 550) { //Clicked Rules Button
+                rules = true;
+            }
         }
         // Tell the panel that we need to redraw things.
         repaint();
@@ -493,7 +542,8 @@ public class BouncingBallsReworked extends JPanel implements MouseListener{
    public void mouseEntered(MouseEvent mouse){ }   
    public void mouseExited(MouseEvent mouse){ }
    //public void mousePressed(MouseEvent mouse){ }
-   public void mouseClicked(MouseEvent mouse){ }
+   public void mouseClicked(MouseEvent mouse){ 
+   }
    public void mouseReleased(MouseEvent mouse){ }
    
    /**
