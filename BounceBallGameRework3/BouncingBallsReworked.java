@@ -389,7 +389,7 @@ public class BouncingBallsReworked extends JPanel implements MouseListener, Mous
       formatter.format("Ball @(%3.0f,%3.0f) Speed=(%2.0f,%2.0f)", ballX, ballY,
             ballSpeedX, ballSpeedY);
       //g.drawString(sb.toString(), 20, 30);  // tester for ball movement
-      g.drawString(mouseX+"" + " " +mouseY, 50, 30);  //tester for mouse
+      //g.drawString(mouseX+"" + " " +mouseY, 50, 30);  //tester for mouse
       //g.drawString(timer+"", 20, 30);  //tester for timer
       //g.drawString(exLife+" " + rectHit+" " + (int)rectX+" " 
       //      + (int)rectY+" " + (int)rectSpeedX+" " + (int)rectSpeedY+" " + lives+"", 20, 30);  //tester for exLife
