@@ -56,6 +56,7 @@ public class BouncingBallsReworked extends JPanel implements MouseListener, Mous
    private boolean uSniper = false;;
    private boolean uBazooka = false;
    private boolean uPistol = true;
+   Boom boom = new Boom();
    
    // Themes
    private int theme;
@@ -113,14 +114,13 @@ public class BouncingBallsReworked extends JPanel implements MouseListener, Mous
                // Calculate the ball's new position
                ballX += ballSpeedX;
                ballY += ballSpeedY;
-               
                if (uSniper == true) {
                    ballRadius = 40;
                } else {
                    ballRadius = 30;
                }
                //Calculate the rect's new position
-               if (exLife == true && timer >= 150) {
+               if (exLife == true && timer >= 200) {
                 rectX += rectSpeedX;
                 rectY += rectSpeedY;
                 }
@@ -134,30 +134,29 @@ public class BouncingBallsReworked extends JPanel implements MouseListener, Mous
                 } else {
                     rectY = -60;
                     rectSpeedX = 0;
-                rectSpeedY =(float)(Math.random()*5+10);
+                    rectSpeedY =(float)(Math.random()*5+10);
                 }
                 rectHit = false;
                 }
-               
                // Check if the ball moves over the bounds
                // If so, adjust the position and speed.
-               if (lost != true) {
+               if (bulletCount != 0 && timer<1000) { 
                    if (ballX - ballRadius < 0) {
                       ballSpeedX = -ballSpeedX; // Reflect along normal
                       ballX = ballRadius; // Re-position the ball at the edge
                    } else if (ballX + ballRadius > BOX_WIDTH) {
                       ballSpeedX = -ballSpeedX;
                       ballX = BOX_WIDTH - ballRadius;
-                   }
-                   // May cross both x and y bounds
-                   if (ballY - ballRadius < 0) {
-                      ballSpeedY = -ballSpeedY;
-                      ballY = ballRadius;
-                   } else if (ballY + ballRadius > BOX_HEIGHT_INFO) {
-                      ballSpeedY = -ballSpeedY;
-                      ballY = BOX_HEIGHT_INFO - ballRadius;
-                   }
+                   }               
                } 
+               // May cross both x and y bounds
+               if (ballY - ballRadius < 0 && (bulletCount != 0 && timer<1000)) {
+                  ballSpeedY = -ballSpeedY;
+                  ballY = ballRadius;
+               } else if (ballY + ballRadius > BOX_HEIGHT_INFO) {
+                  ballSpeedY = -ballSpeedY;
+                  ballY = BOX_HEIGHT_INFO - ballRadius;
+               }
                
                //if the ball is hit
                if (Math.sqrt(Math.pow(mouseX-ballX,2)+Math.pow(mouseY-ballY,2)) <= ballRadius && !gg && menu == false && !uBazooka) {
@@ -210,7 +209,6 @@ public class BouncingBallsReworked extends JPanel implements MouseListener, Mous
                   if ((Math.sqrt(Math.pow(mouseX-ballX,2)+Math.pow(mouseY-ballY,2)) - side <= ballRadius 
                   ||(ballX>=mouseX-30 && ballY>=mouseY-30 && ballX<=mouseX+30 && ballY<=mouseY+30))&& 
                   ballX > 50 && ballY > 50 && !gg && menu == false) {
-                       
                       ballSpeedX = 0;
                       ballSpeedY = 0;
                       hit = true;
@@ -251,7 +249,7 @@ public class BouncingBallsReworked extends JPanel implements MouseListener, Mous
                   lives+=1.0;
                }
                
-               if (bulletCount == 0) {
+               if (ballX < -50 || ballX > 850 || ballY < -50 || ballY > 850) {
                   lost = true;
                   aim = true;
                   ballColor = (int)(Math.random()*3+1);
@@ -266,10 +264,6 @@ public class BouncingBallsReworked extends JPanel implements MouseListener, Mous
                         rectSpeedX = 0;
                         rectSpeedY =(float)(Math.random()*5+10);
                   }
-               }
-               
-               if (timer >= 1000) {
-                  lost = true;
                }
                
                if (gg) {
@@ -390,11 +384,12 @@ public class BouncingBallsReworked extends JPanel implements MouseListener, Mous
             ballSpeedX, ballSpeedY);
       //g.drawString(sb.toString(), 20, 30);  // tester for ball movement
       //g.drawString(mouseX+"" + " " +mouseY, 50, 30);  //tester for mouse
+      //g.drawString(ballSpeedX+"" + " " +ballSpeedY, 50, 30);
       //g.drawString(timer+"", 20, 30);  //tester for timer
       //g.drawString(exLife+" " + rectHit+" " + (int)rectX+" " 
       //      + (int)rectY+" " + (int)rectSpeedX+" " + (int)rectSpeedY+" " + lives+"", 20, 30);  //tester for exLife
       //g.drawString(a + "", 20, 30); //tester for acceleration
-      //g.drawString(hit+"", 20, 30); // hit tester
+      //g.drawString(lost+"", 20, 30); // hit tester
       
       if (menu == false) {
           // bullet count board
@@ -475,52 +470,56 @@ public class BouncingBallsReworked extends JPanel implements MouseListener, Mous
         } else {
             g.setColor(Color.yellow);
         }
-        g.setFont(new Font("Courier New", Font.BOLD, 60));
-        g.drawString("GOT IT!", 350, 350);
+        boom.paint(g, (int)(ballX-90), (int)(ballY-90));
+        //g.setFont(new Font("Courier New", Font.BOLD, 60));
+        //g.drawString("GOT IT!", 350, 350);
         g.setColor(Color.WHITE);
+        if (theme == 0) {
+            g.setColor(Color.black);
+        }
         g.setFont(new Font("Courier New", Font.PLAIN, 30));
         hit = false;
         if (uSniper == true) {
             if(bulletCount>=2)
             {
-             g.drawString("+1500", (int)(ballX + 60), (int)(ballY + 60));
+             g.drawString("+1500", (int)(ballX + 80), (int)(ballY + 80));
              score += 1500;
             }
             else if(bulletCount==1)
             {
-             g.drawString("+1000", (int)(ballX + 60), (int)(ballY + 60));
+             g.drawString("+1000", (int)(ballX + 80), (int)(ballY + 80));
              score += 1000;
             }
             else if(bulletCount==0)
             {
-             g.drawString("+500", (int)(ballX + 60), (int)(ballY + 60));
+             g.drawString("+500", (int)(ballX + 80), (int)(ballY + 80));
              score += 500;
             }
         } else if (uBazooka == true) {
             if(bulletCount>=1)
             {
-             g.drawString("+1500", (int)(ballX + 60), (int)(ballY + 60));
+             g.drawString("+1500", (int)(ballX + 80), (int)(ballY + 80));
              score += 1500;
             }
             else if(bulletCount==0)
             {
-             g.drawString("+1000", (int)(ballX + 60), (int)(ballY + 60));
+             g.drawString("+1000", (int)(ballX + 80), (int)(ballY + 80));
              score += 1000;
             }
         } else if (uPistol == true) {
             if(bulletCount>=4)
             {
-             g.drawString("+1500", (int)(ballX + 60), (int)(ballY + 60));
+             g.drawString("+1500", (int)(ballX + 80), (int)(ballY + 80));
              score += 1500;
             }
             else if(bulletCount==3)
             {
-             g.drawString("+1000", (int)(ballX + 60), (int)(ballY + 60));
+             g.drawString("+1000", (int)(ballX + 80), (int)(ballY + 80));
              score += 1000;
             }
             else if(bulletCount<=2)
             {
-             g.drawString("+500", (int)(ballX + 60), (int)(ballY + 60));
+             g.drawString("+500", (int)(ballX + 80), (int)(ballY + 80));
              score += 500;
             }
         }
